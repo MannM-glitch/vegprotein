@@ -1,109 +1,156 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { GradientButton } from "../components/ui/gradient-button";
+import { CardStack } from "../components/ui/card-stack";
+import { BeamsBackground } from "../components/ui/beams-background";
+
+const featureCards = [
+  {
+    id: 1,
+    title: "Local Discovery",
+    description: "Find protein-rich foods at stores near you with real-time price tracking",
+    imageSrc: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80",
+    tag: "Location",
+  },
+  {
+    id: 2,
+    title: "Nutrition Tracking",
+    description: "Set daily protein goals and monitor your intake with detailed breakdowns",
+    imageSrc: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&q=80",
+    tag: "Health",
+  },
+  {
+    id: 3,
+    title: "Price Comparison",
+    description: "Compare protein-per-dollar across products to maximize your budget",
+    imageSrc: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+    tag: "Savings",
+  },
+  {
+    id: 4,
+    title: "Plant-Based Focus",
+    description: "Curated selection of vegetarian and vegan protein sources",
+    imageSrc: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
+    tag: "Vegan",
+  },
+  {
+    id: 5,
+    title: "Smart Recommendations",
+    description: "AI-powered suggestions based on your goals and preferences",
+    imageSrc: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80",
+    tag: "AI",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="border-b border-neutral-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-              </svg>
+    <div className="min-h-screen">
+      {/* Hero with Beams Background */}
+      <BeamsBackground intensity="medium">
+        {/* Navigation */}
+        <nav className="border-b border-white/10">
+          <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-sm">VP</span>
+              </div>
+              <span className="font-semibold text-white">VegProtein</span>
             </div>
-            <span className="font-semibold text-neutral-900">VegProtein</span>
+            <Link to="/login">
+              <button className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+                Sign in
+              </button>
+            </Link>
           </div>
-          <Link to="/login">
-            <button className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
-              Sign in
-            </button>
-          </Link>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-6">
-        <div className="py-24 md:py-32">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-700 text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              Location-based protein finder
-            </div>
+        {/* Hero Content */}
+        <div className="flex items-center justify-center min-h-[calc(100vh-73px)] px-6">
+          <div className="max-w-2xl text-center">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-green-400 text-sm font-medium tracking-wide uppercase mb-6"
+            >
+              Plant-based nutrition made simple
+            </motion.p>
             
-            <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight leading-tight">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-tight"
+            >
               Find protein-rich foods
-              <span className="text-green-600"> near you</span>
-            </h1>
+              <span className="text-green-400"> near you</span>
+            </motion.h1>
             
-            <p className="mt-6 text-lg text-neutral-600 leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-6 text-lg text-white/70 leading-relaxed"
+            >
               VegProtein scans local grocery stores and markets to find the best deals on 
               plant-based protein sources in your area. Compare prices, track nutrition, 
               and hit your protein goals without the guesswork.
-            </p>
+            </motion.p>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
+            >
               <Link to="/login">
                 <GradientButton>Get started</GradientButton>
               </Link>
               <GradientButton variant="variant">Learn more</GradientButton>
-            </div>
+            </motion.div>
           </div>
         </div>
+      </BeamsBackground>
 
-        {/* Features */}
-        <div className="py-16 border-t border-neutral-200">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-3">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-neutral-900">Local Discovery</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">
-                Automatically finds stores near your location with the best protein options and prices.
+      {/* Features Section - Light background */}
+      <div className="bg-white">
+        <main className="max-w-6xl mx-auto px-6">
+          {/* Features Card Stack */}
+          <div className="py-24">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-neutral-900 mb-4">
+                Everything you need
+              </h2>
+              <p className="text-neutral-600 max-w-xl mx-auto">
+                Powerful features to help you find, track, and optimize your plant-based protein intake
               </p>
             </div>
-
-            <div className="space-y-3">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-neutral-900">Nutrition Tracking</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">
-                Set daily protein goals and track your intake with detailed nutritional breakdowns.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-neutral-900">Price Comparison</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">
-                Compare protein-per-dollar across products and stores to maximize your budget.
-              </p>
-            </div>
+            
+            <CardStack
+              items={featureCards}
+              initialIndex={0}
+              autoAdvance={true}
+              intervalMs={3500}
+              pauseOnHover={true}
+              showDots={true}
+              cardWidth={480}
+              cardHeight={300}
+              overlap={0.5}
+              spreadDeg={40}
+            />
           </div>
-        </div>
-      </main>
+        </main>
 
-      {/* Footer */}
-      <footer className="border-t border-neutral-200 mt-16">
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <p className="text-sm text-neutral-500">
-            © 2026 VegProtein. Built for plant-based athletes.
-          </p>
-        </div>
-      </footer>
+        {/* Footer */}
+        <footer className="border-t border-neutral-200">
+          <div className="max-w-6xl mx-auto px-6 py-8">
+            <p className="text-sm text-neutral-500">
+              © 2026 VegProtein. Built for plant-based athletes.
+            </p>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
