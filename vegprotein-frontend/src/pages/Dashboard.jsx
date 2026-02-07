@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   MapPin, LogOut, Plus, TrendingUp, Target, Award, 
   ChevronRight, Sparkles, Leaf, ShoppingBag, Navigation,
-  Check
+  Check, Flame, Scan, Clock, Calendar, Zap
 } from "lucide-react";
 import { FuturisticNav } from "../components/ui/futuristic-nav";
 
@@ -13,6 +13,7 @@ export default function Dashboard() {
   const [location] = useState("San Francisco, CA");
   const [addedItems, setAddedItems] = useState([]);
   const [showAddModal, setShowAddModal] = useState(null);
+  const [streakDays] = useState(7);
   const nav = useNavigate();
 
   const foods = [
@@ -48,6 +49,14 @@ export default function Dashboard() {
   };
 
   const topPick = [...foods].sort((a, b) => b.perDollar - a.perDollar)[0];
+  const avgCost = (foods.reduce((a, f) => a + f.price, 0) / foods.length).toFixed(2);
+
+  const quickActions = [
+    { icon: Scan, label: "Scan", color: "from-blue-500 to-cyan-500" },
+    { icon: MapPin, label: "Stores", color: "from-orange-500 to-rose-500" },
+    { icon: Calendar, label: "Plan", color: "from-purple-500 to-pink-500" },
+    { icon: Clock, label: "History", color: "from-emerald-500 to-teal-500" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
@@ -81,21 +90,49 @@ export default function Dashboard() {
             </motion.div>
             <span className="font-semibold text-neutral-900 text-lg">VegProtein</span>
           </Link>
-          <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={logout} className="flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-neutral-700 transition-colors px-3 py-2 rounded-xl hover:bg-neutral-100">
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Sign out</span>
-          </motion.button>
+          <div className="flex items-center gap-3">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: "spring" }} className="hidden sm:flex items-center gap-1.5 bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full">
+              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}>
+                <Flame className="w-4 h-4" />
+              </motion.div>
+              <span className="text-sm font-semibold">{streakDays} day streak</span>
+            </motion.div>
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={logout} className="flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-neutral-700 transition-colors px-3 py-2 rounded-xl hover:bg-neutral-100">
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Sign out</span>
+            </motion.button>
+          </div>
         </div>
       </motion.nav>
 
       <main className="max-w-6xl mx-auto px-6 py-8 pb-32">
-        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="mb-8">
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="mb-6">
           <h1 className="text-3xl font-bold text-neutral-900 mb-1">Good morning! 👋</h1>
           <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex items-center gap-2 text-neutral-500">
             <MapPin className="w-4 h-4" />
             <span className="text-sm">{location}</span>
             <button className="text-sm text-green-600 hover:text-green-700 font-medium flex items-center gap-0.5">Change <ChevronRight className="w-3 h-3" /></button>
           </motion.div>
+        </motion.div>
+
+        {/* Quick Actions */}
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12 }} className="grid grid-cols-4 gap-3 mb-6">
+          {quickActions.map((action, idx) => (
+            <motion.button
+              key={action.label}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.15 + idx * 0.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="glass-card rounded-2xl p-4 flex flex-col items-center gap-2 group"
+            >
+              <div className={`w-10 h-10 bg-gradient-to-br ${action.color} rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow`}>
+                <action.icon className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xs font-medium text-neutral-600">{action.label}</span>
+            </motion.button>
+          ))}
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-5 mb-8">
@@ -147,8 +184,12 @@ export default function Dashboard() {
                     <p className="text-lg font-bold text-neutral-900">{Math.max(goal - consumed, 0)}g</p>
                   </div>
                   <div className="flex-1 bg-neutral-50 rounded-2xl p-3">
-                    <p className="text-xs text-neutral-400 mb-0.5">Items Added</p>
+                    <p className="text-xs text-neutral-400 mb-0.5">Items</p>
                     <p className="text-lg font-bold text-neutral-900">{addedItems.length + 3}</p>
+                  </div>
+                  <div className="flex-1 bg-orange-50 rounded-2xl p-3 hidden sm:block">
+                    <p className="text-xs text-orange-500 mb-0.5">Streak</p>
+                    <p className="text-lg font-bold text-orange-600">{streakDays}🔥</p>
                   </div>
                 </div>
               </div>
@@ -160,11 +201,15 @@ export default function Dashboard() {
               <Target className="w-4 h-4 text-blue-500" />
               <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide">Daily Goal</h3>
             </div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-3">
               <input type="number" value={goal} onChange={(e) => setGoal(Number(e.target.value))} className="w-20 px-3 py-2.5 bg-neutral-50 border-0 rounded-xl text-2xl font-bold text-neutral-900 focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-shadow" />
               <span className="text-neutral-400 font-medium">grams</span>
             </div>
-            <p className="text-xs text-neutral-400">Adjust based on your activity level</p>
+            <p className="text-xs text-neutral-400 mb-3">Recommended: 100-150g</p>
+            <div className="flex items-center gap-2 text-xs">
+              <Zap className="w-3.5 h-3.5 text-yellow-500" />
+              <span className="text-neutral-500">Avg spend: <span className="font-semibold text-neutral-700">${avgCost}</span>/item</span>
+            </div>
           </motion.div>
         </div>
 
