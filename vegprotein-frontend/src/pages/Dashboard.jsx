@@ -59,27 +59,56 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f5f5f7]">
+    <div className="min-h-screen bg-gradient-to-br from-green-50/80 via-[#f5f5f7] to-blue-50/50 relative overflow-hidden">
+      {/* Ambient glow orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-green-400/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-emerald-400/15 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 right-1/3 w-72 h-72 bg-teal-400/15 rounded-full blur-3xl" />
+      </div>
+
       <style>{`
         .glass-card {
-          background: rgba(255, 255, 255, 0.72);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.5);
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02), 0 12px 24px rgba(0, 0, 0, 0.06);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.7);
+          box-shadow: 
+            0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+            0 0 0 1px rgba(0, 0, 0, 0.03),
+            0 4px 6px rgba(0, 0, 0, 0.02),
+            0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        .glass-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%);
+          pointer-events: none;
         }
         .glass-card-strong {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+          backdrop-filter: blur(30px) saturate(200%);
+          -webkit-backdrop-filter: blur(30px) saturate(200%);
         }
-        .progress-glow { box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
-        .food-row:hover { background: rgba(34, 197, 94, 0.04); }
+        .progress-glow { 
+          box-shadow: 0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(34, 197, 94, 0.2); 
+        }
+        .food-row:hover { background: rgba(34, 197, 94, 0.06); }
         .ios-button {
-          background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%), linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
-          box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 8px rgba(34, 197, 94, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+          background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 50%), linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+          box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 12px rgba(34, 197, 94, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
         }
         .ios-button:active { transform: scale(0.97); }
+        .shimmer {
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+          animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
       `}</style>
 
       <motion.nav initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="sticky top-0 z-20 glass-card-strong border-b border-white/50">
