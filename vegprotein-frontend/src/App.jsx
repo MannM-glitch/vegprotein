@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import { setAuth } from './utils/api';
 
 function App() {
@@ -22,6 +23,10 @@ function App() {
         <Route
           path="/profile"
           element={token ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/settings"
+          element={token ? <Settings /> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>
