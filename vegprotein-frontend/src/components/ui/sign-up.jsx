@@ -166,10 +166,11 @@ const modalSteps = [
 const TEXT_LOOP_INTERVAL = 1.5;
 
 // --- MAIN COMPONENT ---
-export function SignUp({ onSkip, onSuccess }) {
+export function SignUp({ onSkip, onSuccess, onAuth, authError }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoginMode, setIsLoginMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [authStep, setAuthStep] = useState("email");
@@ -194,32 +195,56 @@ export function SignUp({ onSkip, onSuccess }) {
     }
   };
 
-  const handleFinalSubmit = (e) => {
+  const handleFinalSubmit = async (e) => {
     e.preventDefault();
-    if (modalStatus !== 'closed' || authStep !== 'confirmPassword') return;
+    if (modalStatus !== 'closed') return;
+    
+    // For login mode, we don't need confirm password
+    if (!isLoginMode && authStep !== 'confirmPassword') return;
+    if (isLoginMode && authStep !== 'password') return;
 
-    if (password !== confirmPassword) {
+    if (!isLoginMode && password !== confirmPassword) {
       setModalErrorMessage("Passwords do not match!");
       setModalStatus('error');
-    } else {
-      setModalStatus('loading');
-      const loadingStepsCount = modalSteps.length - 1;
-      const totalDuration = loadingStepsCount * TEXT_LOOP_INTERVAL * 1000;
-      setTimeout(() => {
-        fireSideCanons();
-        setModalStatus('success');
-        setTimeout(() => {
-          onSuccess?.();
-        }, 1500);
-      }, totalDuration);
+      return;
     }
+    
+    setModalStatus('loading');
+    
+    // If onAuth is provided, actually call the API
+    if (onAuth) {
+      const result = await onAuth(email, password, isLoginMode);
+      if (!result.success) {
+        setModalErrorMessage(result.error || "Authentication failed");
+        setModalStatus('error');
+        return;
+      }
+    }
+    
+    // Success animation
+    const loadingStepsCount = modalSteps.length - 1;
+    const totalDuration = loadingStepsCount * TEXT_LOOP_INTERVAL * 1000;
+    setTimeout(() => {
+      fireSideCanons();
+      setModalStatus('success');
+      setTimeout(() => {
+        onSuccess?.();
+      }, 1500);
+    }, totalDuration);
   };
 
   const handleProgressStep = () => {
     if (authStep === 'email') {
       if (isEmailValid) setAuthStep("password");
     } else if (authStep === 'password') {
-      if (isPasswordValid) setAuthStep("confirmPassword");
+      if (isPasswordValid) {
+        if (isLoginMode) {
+          // For login, submit directly from password step
+          handleFinalSubmit({ preventDefault: () => {} });
+        } else {
+          setAuthStep("confirmPassword");
+        }
+      }
     }
   };
 
@@ -332,8 +357,8 @@ export function SignUp({ onSkip, onSuccess }) {
               <motion.div key="email-content" initial={{ y: 6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="w-full flex flex-col items-center gap-4">
                 <BlurFade delay={0.1} className="w-full">
                   <div className="text-center">
-                    <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">Get started</h2>
-                    <p className="mt-2 text-neutral-600">Create your account to track protein</p>
+                    <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">{isLoginMode ? 'Welcome back' : 'Get started'}</h2>
+                    <p className="mt-2 text-neutral-600">{isLoginMode ? 'Sign in to your account' : 'Create your account to track protein'}</p>
                   </div>
                 </BlurFade>
                 <BlurFade delay={0.2}>
@@ -362,8 +387,8 @@ export function SignUp({ onSkip, onSuccess }) {
             )}
             {authStep === "password" && (
               <motion.div key="password-title" initial={{ y: 6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: "easeOut" }} className="w-full flex flex-col items-center text-center gap-2">
-                <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">Create password</h2>
-                <p className="text-neutral-600">Must be at least 6 characters</p>
+                <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">{isLoginMode ? 'Enter password' : 'Create password'}</h2>
+                <p className="text-neutral-600">{isLoginMode ? 'Enter your account password' : 'Must be at least 6 characters'}</p>
               </motion.div>
             )}
             {authStep === "confirmPassword" && (
@@ -498,6 +523,22 @@ export function SignUp({ onSkip, onSuccess }) {
                 </BlurFade>
               )}
             </AnimatePresence>
+            
+            {/* Login/Signup toggle */}
+            {authStep === 'email' && (
+              <BlurFade delay={0.6} className="w-full">
+                <p className="text-center text-sm text-neutral-500">
+                  {isLoginMode ? "Don't have an account? " : "Already have an account? "}
+                  <button
+                    type="button"
+                    onClick={() => setIsLoginMode(!isLoginMode)}
+                    className="font-medium text-green-600 hover:text-green-700 transition-colors"
+                  >
+                    {isLoginMode ? 'Sign up' : 'Sign in'}
+                  </button>
+                </p>
+              </BlurFade>
+            )}
           </form>
         </fieldset>
       </div>

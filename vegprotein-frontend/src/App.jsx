@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
+import Discover from './pages/Discover';
 import { setAuth } from './utils/api';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/discover" element={<Discover />} />
         <Route
           path="/dashboard"
           element={token ? <Dashboard /> : <Navigate to="/login" />}
