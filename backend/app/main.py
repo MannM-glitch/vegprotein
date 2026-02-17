@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .database import engine, Base
-from .routers import auth
+from .routers import auth, users, protein_logs, foods, stores
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -29,6 +29,10 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
+app.include_router(protein_logs.router, prefix="/api")
+app.include_router(foods.router, prefix="/api")
+app.include_router(stores.router, prefix="/api")
 
 
 @app.get("/")
